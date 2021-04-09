@@ -25,7 +25,7 @@ type SshTerm struct {
 	sess     *ssh.Session
 	timeout  time.Duration
 	events   map[uint8][]ioCallback
-	stdin    io.WriteCloser
+	Stdin    io.WriteCloser
 	connSucc bool
 }
 
@@ -103,7 +103,7 @@ func (st *SshTerm) Start() error {
 		return fmt.Errorf("Session xterm: %s", err)
 	}
 
-	st.stdin, err = st.sess.StdinPipe()
+	st.Stdin, err = st.sess.StdinPipe()
 	if err != nil {
 		return fmt.Errorf("Create stdinpipe fail")
 	}
@@ -133,7 +133,7 @@ func (st *SshTerm) Start() error {
 				return
 			}
 			if n > 0 {
-				_, _ = st.stdin.Write(buf[:n])
+				_, _ = st.Stdin.Write(buf[:n])
 			}
 			if call {
 				for _, cb := range st.events[EVENT_STDIN] {
